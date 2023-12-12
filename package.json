@@ -6,7 +6,7 @@
     "build": "vite build",
     "dev": "vite --host 0.0.0.0",
     "preview": "vite preview",
-    "vercel":"vercel dev"
+    "vercel": "vercel dev"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.8",
@@ -32,6 +32,6 @@
     "@vitejs/plugin-vue": "^4.4.0",
     "@vue/cli-plugin-pwa": "~5.0.0",
     "vercel": "^32.7.1",
-    "vite": "^4.4.11"
+    "vite": "^5.0.8"
   }
 }
