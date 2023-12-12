@@ -1,22 +1,19 @@
 {
-  "headers": [
+  "version": 2,
+  "builds": [
     {
-      "source": "/js/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "max-age=86400, s-maxage=86400"
-        }
-      ]
-    },
+      "src": "src/main.js",
+      "use": "@vercel/static-build",
+      "config": {
+        "maxDuration": 3600
+      }
+    }
+  ],
+  "routes": [
+    { "handle": "filesystem" },
     {
-      "source": "/fonts/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "max-age=31536000, immutable"
-        }
-      ]
+      "src": "/.*",
+      "dest": "/index.html"
     }
   ]
 }
