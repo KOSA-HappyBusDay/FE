@@ -5,7 +5,8 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite --host 0.0.0.0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "vercel":"vercel dev"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.8",
@@ -30,6 +31,7 @@
     "@types/sockjs-client": "^1.5.4",
     "@vitejs/plugin-vue": "^4.4.0",
     "@vue/cli-plugin-pwa": "~5.0.0",
+    "vercel": "^32.7.1",
     "vite": "^4.4.11"
   }
 }
