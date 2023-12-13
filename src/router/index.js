@@ -9,13 +9,8 @@ import Event from '@/components/film/Event.vue'
 import ListCon from '@/components/notification/ListCon.vue'
 import ResultList from '@/components/notification/ResultList.vue'
 import Mypage from '@/components/mypage/Mypage.vue'
+import Chatting from '@/components/chatting_room/Chatting.vue'
 import ClinicList from '@/components/chatting_room/ClinicList.vue'
-
-import ChatJoin from '@/components/chatting_room/ChatJoin.vue'
-import ChatSession from '@/components/chatting_room/ChatSession.vue'
-import Chat from '@/components/chatting_room/Chat.vue'
-
-import Chatbot from '@/components/mypage/Chatbot.vue'
 
 
 const router = createRouter({
@@ -67,22 +62,9 @@ const router = createRouter({
       component: Mypage
     },
     {
-      path: '/chat',
-      name: 'Chat',
-      component: Chat,
-      children: [
-        {
-          path: 'session',
-          name: 'ChatSession',
-          component: ChatSession,
-          props: true
-        },
-        {
-          path: 'join',
-          name: 'ChatJoin',
-          component: ChatJoin
-        }
-      ]
+      path: '/chatting/:roomId',
+      name: 'Chatting',
+      component: Chatting
     },
     {
       path: '/resultList',
@@ -93,11 +75,6 @@ const router = createRouter({
       path: '/clinicList',
       name: 'ClinicList',
       component: ClinicList
-    },
-    {
-      path: '/chatbot',
-      name: 'Chatbot',
-      component: Chatbot
     },
   ]
 })

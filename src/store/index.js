@@ -3,10 +3,12 @@ import createPersistedState from 'vuex-persistedstate';
 
 export default createStore({
   state: {
+    clinicMembers: [],
     token: '',
     isLogin: false,
-    user: '', // user 상태 추가
+    memberId: null,
     rooms: [],
+    user: { type: '' },
   },
   getters: {
     getToken(state) {
@@ -15,33 +17,54 @@ export default createStore({
     getIsLogin(state) {
       return !!state.isLogin;
     },
-    getUser(state) {
-      return state.user;
+    getMemberId(state) {
+      return state.memberId;
     },
   },
   mutations: {
+    setClinicMembers(state, members) {
+      state.clinicMembers = members;
+    },
+    setRooms(state, rooms) {
+      state.rooms = rooms;
+    },
     setToken(state, value) {
       state.token = value;
     },
     setIsLogin(state, value) {
       state.isLogin = value;
     },
-    setUser(state, value) {
-      state.user = value;
+    setMemberId(state, value) {
+      state.memberId = value;
     },
-    logout(state) {
+    setLogout(state) {
       state.isLogin = false;
-      state.user = null; // 로그아웃 시 user 상태 초기화
+      state.memberId = null;
+      state.user = { type: '' }; // 로그아웃 시 user 상태 초기화
     },
     reserveDate(state, date) {
-      // 특정 날짜를 예약 상태로 변경
       state.reservationDates.push(date);
     },
     addRoom(state, room) {
       state.rooms.push(room);
     },
   },
+  actions: {
+    // 로그인 액션
+    async login({ commit }, credentials) {
+      try {
+        // 로그인 API 호출 등
+        // 예: const response = await axios.post('http://example.com/login', credentials);
+
+        // 로그인이 성공하면 memberId를 저장
+        const memberId = response.data.memberId;
+        commit('setMemberId', memberId);
+      } catch (error) {
+        console.error('Login failed:', error);
+      }
+    },
+  },
   plugins: [createPersistedState({
-    paths: ["token", "user", "isLogin"]
+    paths: ["token", "user", "isLogin", "memberId"]
   })],
 });

@@ -1,8 +1,5 @@
 <template>
     <div class="wrap">
-      <div class="Djoin">
-        <RouterLink to="/Djoin">의사로 회원가입</RouterLink>
-      </div>
       <form class="join_box" @submit.prevent="joinForm">
         <div class="join_title">
           <p>회원가입</p>
@@ -32,16 +29,20 @@
           <input v-model="joinUser.passwordtest" type="password" class="control" placeholder="비밀번호를 입력해주세요">
         </div>
         <div class="group">
+          <label for="address">주소</label>
+          <input v-model="joinUser.address" type="address" class="control" placeholder="주소를 입력해주세요">
+        </div>
+        <div class="group">
+          <label for="birthday">생일</label>
+          <input v-model="joinUser.birthday" type="date"  class="control" placeholder="생일 입력">
+        </div>
+        <div class="group">
           <label for="gender">성별</label>
             <select v-model="joinUser.gender">
               <option disabled value="">다음 중 하나를 선택하세요</option>
               <option>남성</option>
               <option>여성</option>
             </select>
-        </div>
-        <div class="group" style="margin-top:20px;">
-          <label for="birthday">생일</label>
-          <input v-model="joinUser.birthday" type="date"  class="control" placeholder="생일 입력">
         </div>
         <div class="group">
           <label for="skintype">피부 성질</label>
@@ -54,6 +55,7 @@
         </div>
         <div class="button">
           <button class="btn" type="submit" v-on:touchstart="joinForm">회원가입</button>
+          <RouterLink to="/Djoin"><button class="btn" style="background-color:rgb(34, 100, 153)">병원으로 회원가입</button></RouterLink>
         </div>
     </form>
     </div>
@@ -75,6 +77,7 @@
           passwordtest: "",
           skintype: "",
           gender: "",
+          address:"",
         }),
       };
     },
@@ -85,7 +88,7 @@
         return; // 일치하지 않으면 회원가입 시도를 중단
       }
         axios
-        .post("http://192.168.0.23:8761/auth/register", this.joinUser, {
+        .post("http://localhost:8761/auth/register", this.joinUser, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -105,23 +108,27 @@
 };
 </script>
   <style scoped>
-  .wrap{height:100%;
-    margin-top:150px;
+  a{text-decoration:none;
+   color:#fff;}
+  .wrap{height:1000px;
+         margin-bottom: 30px;
+         margin-top:150px;
         font-family: 'NPSfontBold';}
   .join_box{width:40%;;
-            height:700px;
+    border-radius:10px;
+    background-color:#fbfbfb;
+            height:82%;
             border:1px solid lightgray;
             box-shadow:3px 3px 3px 3px lightgray;
             margin:0 auto;
-            margin-top:50px;
-            margin-bottom:60px;}
+            margin-top:50px;}
   
   .join_title{width:100%;
              margin-top:20px;
-              height:30px;}
+              height:60px;}
   
-  .join_title p{font-size:20px;
-                width:90px;
+  .join_title p{font-size:25px;
+                width:100px;
                 margin:0 auto;
                 font-weight:700;}
   
@@ -133,7 +140,7 @@
                margin-top:10px;
                display:block;
                float:left;
-               margin-left:3%;}
+               margin-left:5%;}
   
   .group input{width:70%;;
                height:40px;
@@ -144,9 +151,9 @@
                padding:5px;
                float:left;}
   
-  .group select{width:200px;
+  .group select{width:250px;
                 height:30px;
-                margin-left:20px;
+                margin-left:3%;
                 margin-top:10px;}
   
   .button{width:100%;
@@ -155,21 +162,20 @@
   .button .btn{width:92%;;
                height:40px;
                margin-left:4%;
-               margin-top:30px;
+               margin-top:10px;
                border-radius: 10px;
                border:0;
                color:#ffffff;
-               background-color:#82d7ff;}
+               background-color:rgb(38, 150, 255);}
 
- @media screen and (max-width:850px){
-  
-  .group input{width:65%;}
-} 
 
-@media screen and (max-width:600px){
+@media screen and (max-width:1200px){
   
-  .join_box{width:335px;
-            border:0;
-            box-shadow:none;}
+  .join_box{width:340px;}
+
+  .group input{width:60%;}
+
+  .group select{width:200px;
+                margin-left:15px;}
 }
   </style>

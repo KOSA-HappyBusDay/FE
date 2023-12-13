@@ -4,7 +4,7 @@
       <div class="join_title">
         <p>병원 회원가입</p>
       </div>
-      <div class="group">
+      <div class="group" style="margin-top:40px">
         <label for="hospitalname">병원명</label>
         <input v-model="DjoinUser.clinicName" type="text" class="control" placeholder="병원이름을 입력해주세요">
       </div>
@@ -26,7 +26,7 @@
       </div>
       <div class="group">
         <label for="clinicaddress">주소</label>
-        <input v-model="DjoinUser.clinicAddress" type="text" class="control" placeholder="이메일를 입력해주세요">
+        <input v-model="DjoinUser.clinicAddress" type="text" class="control" placeholder="주소를 입력해주세요">
       </div>
       <div class="button">
         <button class="btn" type="submit" @click="DjoinForm">회원가입</button>
@@ -64,7 +64,7 @@ export default {
       }
 
       axios
-        .post("http://192.168.0.23:8761/clinic-members/register", this.DjoinUser, {
+        .post("http://localhost:8761/clinic-members/register", this.DjoinUser, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -87,8 +87,9 @@ export default {
   .wrap{height:100%;
     margin-top:150px;
         font-family: 'NPSfontBold';}
-  .join_box{width:40%;;
+  .join_box{width:30%;;
             height:500px;
+            background-color:#fbfbfb;
             border:1px solid lightgray;
             box-shadow:3px 3px 3px 3px lightgray;
             margin:0 auto;
@@ -99,8 +100,8 @@ export default {
              margin-top:20px;
               height:30px;}
   
-  .join_title p{font-size:20px;
-                width:120px;
+  .join_title p{font-size:25px;
+                width:150px;
                 margin:0 auto;
                 font-weight:700;}
   
@@ -112,7 +113,7 @@ export default {
                margin-top:10px;
                display:block;
                float:left;
-               margin-left:3%;}
+               margin-left:5%;}
   
   .group input{width:70%;;
                height:40px;
@@ -123,21 +124,17 @@ export default {
                padding:5px;
                float:left;}
   
-  .group select{width:200px;
-                height:30px;
-                margin-top:10px;}
-  
   .button{width:100%;
           height:50px;}
   
   .button .btn{width:92%;;
                height:40px;
                margin-left:4%;
-               margin-top:30px;
+               margin-top:10px;
                border-radius: 10px;
                border:0;
                color:#ffffff;
-               background-color:#82d7ff;}
+               background-color:rgb(38, 150, 255);}
 
  @media screen and (max-width:850px){
   
@@ -146,8 +143,6 @@ export default {
 
 @media screen and (max-width:600px){
   
-  .join_box{width:335px;
-            border:0;
-            box-shadow:none;}
+  .join_box{width:335px;}
 }
   </style>

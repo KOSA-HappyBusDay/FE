@@ -37,8 +37,13 @@ export default {
   },
   methods: {
     LoginForm() {
+      if (!this.LoginUser.clinicEmail || !this.LoginUser.password) {
+        alert("이메일과 비밀번호를 입력해주세요.");
+        return; // Stop the function execution
+      }
+  
       axios
-        .post("http://192.168.0.23:8761/clinic-members/login", this.LoginUser, {
+        .post("http://localhost:8761/clinic-members/login", this.LoginUser, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${this.$store.getters.getToken}`,
@@ -66,6 +71,7 @@ a{text-decoration:none;}
       
 form{width:450px;
            height:400px;
+           background-color:#fbfbfb;
            margin:0 auto;
            margin-top:200px;
            border: 1px solid rgb(128, 128, 128);

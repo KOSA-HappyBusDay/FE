@@ -22,23 +22,25 @@
                             <li class="nav-item">
                                 <a class="nav-link active" aria-current="page" href="#">Home</a>
                             </li>
-                            <li  class="nav-item" v-if="$store.getters.getIsLogin">
-                                <RouterLink to="/logout" type="button" @click="logout">
-                                    <a class="nav-link" href="#">
-                                        로그아웃
-                                    </a>
-                                </RouterLink>
-                            </li>
-                            <li class="nav-item" v-else-if="!$store.getters.getIsLogin">
-                                <RouterLink to="/login">
-                                    <a class="nav-link" href="#">
-                                        로그인
-                                    </a>
-                                </RouterLink>
-                            </li>
-                            <li class="nav-item" v-if="!$store.getters.getIsLogin">
-                                <RouterLink to="/join"><a class="nav-link" href="#">회원가입</a></RouterLink>
-                            </li>
+                            <li class="nav-item" v-if="$store.state.isLogin">
+                <RouterLink to="/logout" type="button" @click="logout">
+                  <a class="nav-link" href="#">
+                    로그아웃
+                  </a>
+                </RouterLink>
+              </li>
+              <li class="nav-item" v-else>
+                <RouterLink to="/login">
+                  <a class="nav-link" href="#">
+                    로그인
+                  </a>
+                </RouterLink>
+              </li>
+              <li class="nav-item" v-if="!$store.state.isLogin">
+                <RouterLink to="/join">
+                  <a class="nav-link" href="#">회원가입</a>
+                </RouterLink>
+              </li>
                             <li class="nav-item">
                                 <RouterLink to="/event"><a class="nav-link" href="#">얼굴 촬영</a></RouterLink>
                             </li>
@@ -74,7 +76,7 @@ export default{
         },
         logout() {
       // 만약 Vuex 스토어에 로그아웃 메서드가 있다면 호출합니다.
-      this.$store.commit('logout'); // 이 mutation은 스토어에 구현되어 있어야 합니다.
+      this.$store.commit('setLogout'); // 이 mutation은 스토어에 구현되어 있어야 합니다.
     },
     },
     components: { RouterLink }
@@ -91,11 +93,11 @@ a{text-decoration:none;
       width:100%;
         top:0; }
 
-img{width:120px;
+img{width:160px;
     margin-top:20px;}
-.navbar a{width:90px;}
+.navbar a{width:120px;}
 header{font-family: 'NPSfontBold';
-       margin-top:120px;}
+       margin-top:150px;}
 .container-fluid img{width:90%;}
 
 @media screen and (max-width:600px){

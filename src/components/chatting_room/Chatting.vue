@@ -1,158 +1,117 @@
 <template>
-  <div class="chat" fluid mt-5>
-    <div class="text-sm-h3 text-h4 font-weight-bold ml-3">실시간 채팅</div>
-
-    <!-- 병원 선택 드롭다운 -->
-    <select v-model="selectedHospital">
-      <option v-for="hospital in hospitals" :key="hospital.id" :value="hospital.id">
-        {{ hospital.name }}
-      </option>
-    </select>
-
-    <v-list id="chats">
-      <template v-for="(item, idx) in messages" :key="idx">
-        <v-list-item>
-          <v-list-item-avatar v-if="item.senderName !== senderName">
-            <v-icon x-large>mdi-account-circle</v-icon>
-          </v-list-item-avatar>
-
-          <v-list-item-content :class="{ 'text-right': item.senderName === senderName }">
-            <v-list-item-title>{{ item.content }}</v-list-item-title>
-          </v-list-item-content>
-
-          <v-list-item-avatar v-if="item.senderName === senderName">
-            <!-- 여기에 발신자의 프로필 이미지를 선택적으로 포함할 수 있습니다 -->
-          </v-list-item-avatar>
-        </v-list-item>
-      </template>
-    </v-list>
-    
-    <v-form class="input mt-5 d-flex">
-      <v-textarea
-        v-model="message"
-        autofocus
-        label="채팅을 남겨주세요."
-        color="green darken-1"
-        auto-grow
-        outlined
-        rows="1"
-        row-height="15"
-        @keyup.enter="sendMessage"
-      ></v-textarea>
-      <div>
-        <v-btn @click="sendMessage" text class="mt-3 font-weight-bold">등록</v-btn>
+  <div id="app" v-cloak>
+    <div>
+      <h2>{{ chatRoom.name }}</h2>
+    </div>
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <label class="input-group-text">내용</label>
       </div>
-    </v-form>
+      <input type="text" class="form-control" v-model="message" @keypress.enter="sendMessage">
+      <div class="input-group-append">
+        <button class="btn btn-primary" type="button" @click="sendMessage">보내기</button>
+      </div>
+    </div>
+    <ul class="list-group">
+      <li class="list-group-item" v-for="(message, index) in messages" :key="index">
+        {{ message.sender }} - {{ message.message }}
+      </li>
+    </ul>
+    <div></div>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import Stomp from 'webstomp-client'
-import SockJS from 'sockjs-client'
+import stomp from 'stompjs';
+import SockJS from 'sockjs-client';
 
 export default {
-  name: 'LiveChat',
-  computed: {
-    ...mapState([
-      'userInfo',
-    ])
-  },
   data() {
     return {
-      senderName: '',
-      id: '',
+      chatRoomName: '', // 채팅방 이름
+      chatRoom: {},
+      sender: '',
       message: '',
       messages: [],
-      stompClient: null,
-      hospitals: [],  // 병원 목록
-      selectedHospital: null  // 선택된 병원
-    }
+      reconnect: 0,
+      websocket: null,
+    };
   },
   created() {
-    this.senderName = this.userInfo.nickname;
-    this.id = this.userInfo.id;
-    this.fetchHospitals();
-    this.connect();
+    // localStorage에서 채팅방 정보 가져오기
+    this.chatRoomName = localStorage.getItem('wschat.roomName');
+    this.sender = localStorage.getItem('wschat.sender');
+    // 채팅방 정보가 있다면 바로 웹소켓 초기화
+    if (this.chatRoomName) {
+      this.initializeWebSocket();
+    }
   },
   methods: {
-    fetchHospitals() {
-      // 병원 목록을 가져오는 코드를 여기에 추가하세요.
+    initializeWebSocket() {
+      var sock = new SockJS("http://localhost:8761/ws");
+      this.websocket = stomp.over(sock);
+      this.websocket.onclose = this.onClose.bind(this); // bind 추가
+      this.connectWebSocket();
     },
-    sendMessage() {
-      if (this.senderName !== '' && this.message !== '') {
-        this.send()
-        this.message = ''
-      }
+    onClose(event) {
+      console.log("WebSocket connection closed:", event);
+      // 추가적인 처리 로직을 넣을 수 있습니다.
     },
-    send() {
-      if (this.stompClient && this.stompClient.connected) {
-        const msg = { 
-          senderName: this.senderName,
-          content: this.message,
-          id: this.id,
-          hospitalId: this.selectedHospital  // 선택된 병원 ID를 메시지에 추가
-        }
-        this.stompClient.send("/chat/message", JSON.stringify(msg), {})  // "/chat/chat"을 "/chat/message"로 변경
-      }
-    },   
-    connect() {
-      const serverURL = "http://localhost:8761/chat"
-      let socket = new SockJS(serverURL)
-      this.stompClient = Stomp.over(socket)
+    connectWebSocket() {
+      const serverURL = "http://localhost:8761"
+      let socket = new SockJS("/ws");
+      this.stompClient = Stomp.over(socket);
+      console.log(`소켓 연결을 시도합니다. 서버 주소:http://localhost:8761/ws`)
       this.stompClient.connect(
         {},
-        () => {
-          this.connected = true
-          this.stompClient.subscribe(`/topic/messages/${this.selectedHospital}`, res => {  // "/topic/chat/messages"를 "/topic/messages"로 변경
-            this.messages.push(JSON.parse(res.body))
-          })
+        frame => {
+          console.log("WebSocket connected", frame); // 연결 성공 시 로그
+          // 메시지 수신
+          this.websocket.subscribe("/topic/messages", message => {
+            var recv = JSON.parse(message.body);
+            this.recvMessage(recv);
+          });
+          // 읽은 메시지 수신
+          this.websocket.subscribe("/topic/chat/read/" + this.messageId, () => {
+            // 읽은 메시지를 처리하는 로직 추가
+          });
+          // 방 입장 메시지 전송
+          this.websocket.send("/app/chat", {}, JSON.stringify({ type: 'ENTER', roomName: this.chatRoomName, sender: this.sender }));
         },
-      )        
+        error => {
+          // 연결 실패 시 처리
+          if (this.reconnect++ <= 5) {
+            setTimeout(() => {
+              console.log("connection reconnect");
+              this.initializeWebSocket();
+            }, 10 * 1000);
+          }
+        }
+      );
     },
-    scrollToTop() {
-      this.$vuetify.goTo(0)
-    },
-    goToHome() {
-      this.$router.push('/main')
-    }
-  },
-  watch: {
-    selectedHospital(newVal, oldVal) {
-      if (newVal !== oldVal) {
-        this.stompClient.unsubscribe(`/topic/messages/${oldVal}`);
-        this.stompClient.subscribe(`/topic/messages/${newVal}`, res => {
-          this.messages.push(JSON.parse(res.body))
-        });
+    sendMessage() {
+      if (this.websocket && this.websocket.connected) {
+        // 메시지 전송
+        const chatMessage = {
+          type: 'TALK',
+          roomName: this.chatRoomName,
+          sender: this.sender,
+          message: this.message
+        };
+        this.websocket.send("/app/chat", {}, JSON.stringify(chatMessage));
+        this.message = '';
+      } else {
+        console.error("WebSocket 연결이 설정되지 않았습니다.");
       }
-    }
+    },
+    recvMessage(recv) {
+      this.messages.unshift({ "type": recv.type, "sender": recv.type == 'ENTER' ? '[알림]' : recv.sender, "message": recv.message });
+    },
   },
-  updated() {
-    const chatbox = document.querySelector('#chats') 
-    if (chatbox) {
-      chatbox.scrollTop = chatbox.scrollHeight
-    }
-  }
-} 
+};
 </script>
 
 <style scoped>
-  #jara {
-    top: 10vh;
-  }
-
-  .input {
-    position: absolute;
-    bottom: 0;
-  }
-
-  #chats{
-    position: absolute;
-    overflow-y: scroll;
-    height: 500px;
-    width: 100%;
-    top: 100px;
-  }
-
-  .chat{margin-top:300px;}
+/* 스타일은 필요에 따라 조정하세요 */
+.wrap { width: 100%; }
 </style>

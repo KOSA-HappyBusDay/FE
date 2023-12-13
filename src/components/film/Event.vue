@@ -97,7 +97,7 @@ export default {
         }
       });
 
-      const imageUploadUrl = 'http://192.168.0.23:8761/face-picture/upload';
+      const imageUploadUrl = 'http://localhost:8761/face-picture/upload';
 
       const imagePromise = axios.post(imageUploadUrl, formData, {
         headers: {
@@ -116,37 +116,37 @@ export default {
           alert('업로드에 실패했습니다: ' + error.response.data.message);
         });
     },
-    // flaskImage() {
-    //   const formData = new FormData();
-    //   formData.append('album_path', this.uploadImage.album_path);
+    flaskImage() {
+      const formData = new FormData();
+      formData.append('album_path', this.uploadImage.album_path);
       
-    //   // 각 이미지 속성을 루프하여 FormData에 추가
-    //   Object.keys(this.uploadImage).forEach(key => {
-    //     const image = this.uploadImage[key];
-    //     if (image) {
-    //       // 각 이미지를 고유한 키로 추가
-    //       formData.append(`file_${key}`, image);
-    //     }
-    //   });
+      // 각 이미지 속성을 루프하여 FormData에 추가
+      Object.keys(this.uploadImage).forEach(key => {
+        const image = this.uploadImage[key];
+        if (image) {
+          // 각 이미지를 고유한 키로 추가
+          formData.append(`file_${key}`, image);
+        }
+      });
 
-    //   const flaskUploadUrl = 'http://127.0.0.1:5000/predict';
+      const flaskUploadUrl = 'http://127.0.0.1:5000/predict';
 
-    //   const flaskPromise = axios.post(flaskUploadUrl, formData, {
-    //     headers: {
-    //       'Content-Type': 'multipart/form-data',
-    //     }
-    //   });
+      const flaskPromise = axios.post(flaskUploadUrl, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        }
+      });
 
-    //   flaskPromise
-    //     .then(response => {
-    //       console.log(response);
-    //       alert('진단 되었습니다');
-    //     })
-    //     .catch(error => {
-    //       console.error(error);
-    //       alert('진단에 실패했습니다: ' + error.response.data.message);
-    //     });
-    //   }
+      flaskPromise
+        .then(response => {
+          console.log(response);
+          alert('진단 되었습니다');
+        })
+        .catch(error => {
+          console.error(error);
+          alert('진단에 실패했습니다: ' + error.response.data.message);
+        });
+      }
   }
 };
 </script>

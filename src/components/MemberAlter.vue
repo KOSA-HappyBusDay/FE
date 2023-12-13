@@ -56,45 +56,48 @@
 
 <script>
 import { reactive } from "vue";
-import axios from "axios"; // axios 인스턴스 import
-  
-  export default {
-    name: 'MemberAlter',
-    data() {
-      return {
-        joinUser: reactive({
-          email: "",
-          password: "",
-          name: "",
-          nickname: "",
-          birthday: "",
-          passwordtest: "",
-          skintype: "",
-          gender: "",
-        }),
-      };
-    },
-    methods: {
-      joinForm() {
-        if (this.joinUser.password !== this.joinUser.passwordtest) {
+import axios from "axios";
+
+export default {
+  name: 'MemberAlter',
+  data() {
+    return {
+      joinUser: reactive({
+        email: "",
+        password: "",
+        name: "",
+        nickname: "",
+        birthday: "",
+        passwordtest: "",
+        skintype: "",
+        gender: "",
+      }),
+    };
+  },
+  methods: {
+    async updateUserInfo() {
+      if (this.joinUser.password !== this.joinUser.passwordtest) {
         alert("비밀번호가 일치하지 않습니다.");
-        return; // 일치하지 않으면 회원가입 시도를 중단
+        return;
       }
-        axios
-        .post("http://http://192.168.0.23:8761/auth/register", this.joinUser, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-        .then((result) => {
-          if (result.status === 200) {
-            alert("수정사항을 저장하였습니다");
+
+      try {
+        const response = await axios.put(
+          `http://localhost:8761/auth/update/`,
+          this.joinUser,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
           }
-        })
-        .catch((err) => {
-          console.log(err);
-        })
-        
+        );
+
+        if (response.status === 200) {
+          alert("수정사항을 저장하였습니다");
+        }
+      } catch (error) {
+        console.error(error);
+      }
     },
   },
 };
