@@ -14,5 +14,6 @@ export default {
   server: {
     open: true,
   },
+  define: { _global: ({}), }
 
 };

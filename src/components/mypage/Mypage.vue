@@ -9,7 +9,7 @@
           accept="image/*" class="hidden-input">
       </form>
     </div>
-
+   <div class="menu_wrap">
     <div class="menu">
       <ul class="menu_list">
         <li @click="selectContent('inspectionList')">검사 LIST</li>
@@ -28,6 +28,7 @@
         <MemberAlter />
       </div>
     </div>
+  </div>
   </div>
 </template>
 
@@ -77,16 +78,23 @@ export default {
 
 <style scoped>
 .wrap {
-  margin-top:150px;
+  padding-top:200px;
+  width:97%;
+  margin:0 auto;
+  height:170vh;
+  border-radius: 10px;
+  font-family: 'SUITE Variable';
 }
-.profile{text-align: center;}
+.profile{text-align: center;
+        height:250px;
+        width:100%;}
 .file-label {
   cursor: pointer;
   margin-top:10px;
   margin-left:20px;
   width:110px;
   height:30px;
-  background-color: #3498db;
+  background-color: rgb(34, 100, 153);;
   color: #fff;
   border-radius: 5px;
   display: inline-block;
@@ -96,13 +104,16 @@ export default {
   display: none;
 }
 
+.menu_wrap{border:1px solid lightgray;
+margin:0 auto;}
+
 img {
   width:140px;
+  height:140px;
+  border:1px solid black;
   margin-top: 10px;
   border-radius:100px;
   margin-left:20px;
-  max-width: 200px;
-  max-height: 200px;
 }
 
 div {
@@ -110,20 +121,33 @@ div {
 }
 
 .menu {
-  width:100%;
+  width:15%;
   display: block;
-  height:20px;
+  height:100%;
+  float:left;
 }
 
+ul{padding-left:0}
 .menu_list li {
-  float:left;    
-  margin-top:40px;
-  border-top:1px solid black;
-  border-bottom: 1px solid black;
-  margin-left:20%;
+font-size: 18px;
+font-weight:500;
+  text-align: center;
+  padding:5px;
+  border-bottom:1px solid lightgray;
+  border-right:1px solid lightgray;
+  margin-top:5px
+
 }
 
 .content {
   width:100%;
+}
+
+@media screen and (max-width:1000px){
+
+  .menu_list li {width:130px;
+
+}
+
 }
 </style>

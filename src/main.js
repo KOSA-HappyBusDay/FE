@@ -8,7 +8,7 @@ import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 const instance = axios.create({
-    baseURL: "http://localhost:8761/",
+    baseURL: "http://192.168.0.10:5173/",
     timeout: 1000,
 });
 

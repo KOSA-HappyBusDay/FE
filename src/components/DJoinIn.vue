@@ -84,11 +84,11 @@ export default {
 };
 </script>
   <style scoped>
-  .wrap{height:100%;
-    margin-top:150px;
+  .wrap{height:100vh;
+        padding-top:150px;
         font-family: 'NPSfontBold';}
-  .join_box{width:30%;;
-            height:500px;
+  .join_box{width:40%;;
+            height:530px;
             background-color:#fbfbfb;
             border:1px solid lightgray;
             box-shadow:3px 3px 3px 3px lightgray;
@@ -101,7 +101,7 @@ export default {
               height:30px;}
   
   .join_title p{font-size:25px;
-                width:150px;
+                width:160px;
                 margin:0 auto;
                 font-weight:700;}
   
@@ -109,17 +109,18 @@ export default {
          margin-top:10px;
          height:50px;}
   .group label{font-size:16px;
-               width:90px;
+               width:100px;
                margin-top:10px;
                display:block;
                float:left;
                margin-left:5%;}
   
-  .group input{width:70%;;
+  .group input{width:65%;;
                height:40px;
                margin-left:10px;
                border:0;
-               background-color:#fff;
+               background-color:#fbfbfb;
+
                border-bottom:2px solid lightgray;
                padding:5px;
                float:left;}
@@ -136,13 +137,14 @@ export default {
                color:#ffffff;
                background-color:rgb(38, 150, 255);}
 
- @media screen and (max-width:850px){
-  
-  .group input{width:65%;}
-} 
-
-@media screen and (max-width:600px){
+ @media screen and (max-width:1200px){
   
   .join_box{width:335px;}
 }
+
+ @media screen and (max-width:850px){
+  
+  .group input{width:60%;}
+} 
+
   </style>

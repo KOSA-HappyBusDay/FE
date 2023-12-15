@@ -25,71 +25,75 @@
 </div>
 </template>
 <script>
-  import { reactive } from "vue";
-  import axios from "axios"; // axios 인스턴스 import
-  
-  export default {
-    data() {
-      return {
-        LoginUser: reactive({
-          email: "",
-          password: "",
-        }),
-      };
-    },
-    methods: {
-      LoginForm() {
-        if (!this.LoginUser.email || !this.LoginUser.password) {
-      alert("이메일과 비밀번호를 입력해주세요.");
-      return; // Stop the function execution
-    }
-        axios.post("http://localhost:8761/auth/login", this.LoginUser, {
-  headers: {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${this.$store.getters.getToken}`
+import { reactive } from "vue";
+import axios from "axios"; // axios 인스턴스 import
+
+export default {
+  data() {
+    return {
+      LoginUser: reactive({
+        email: "",
+        password: "",
+      }),
+    };
   },
+  methods: {
+    LoginForm() {
+      if (!this.LoginUser.email || !this.LoginUser.password) {
+    alert("이메일과 비밀번호를 입력해주세요.");
+    return; // Stop the function execution
+  }
+      axios.post("http://localhost:8761/auth/login", this.LoginUser, {
+headers: {
+  "Content-Type": "application/json",
+  Authorization: `Bearer ${this.$store.getters.getToken}`
+},
 })
 .then((result) => {
-  this.$store.commit('setToken', result.data.token);
-  this.$store.commit('setIsLogin', true);
-  if (result.status === 200) {
-    alert("로그인 성공");
-  this.$store.commit('setMemberId', result.data.id); // memberId 저장
-    this.$router.push("/");
-  }
+console.log("Login response:", result); // 응답 출력
+this.$store.commit('setToken', result.data.token);
+this.$store.commit('setIsLogin', true);
+if (result.status === 200) {
+  alert("로그인 성공");
+this.$store.commit('setMemberId', result.data.id);
+this.$store.commit('setEmail', this.LoginUser.email); // memberId 저장
+this.$store.commit('setMemberType', 'member'); // memberType을 'member'로 설정
+console.log('Vuex 상태 업데이트 후:', this.$store.state); 
+  this.$router.push("/");
+}
 })
 .catch((err) => {
-  console.log(err);
+console.log(err);
 });
 },
-    
-  },
+  
+},
 };
 </script>
+
 <style scoped>
 a{text-decoration:none;}
-.wrap{ font-family: 'NPSfontBold';
-      margin-top:200px;}
+.wrap{font-family: 'SUITE Variable';
+      padding-top:200px;
+       height:80vh;}
 
-.title{width:100%;
-       margin-bottom:30px;}
       
 form{width:33%;
       border-radius:10px;
-           height:450px;
+           height:470px;
            background-color: #fff;
            margin:0 auto;
            border: 1px solid rgb(185, 185, 185);
            background-color:#fbfbfb;
            box-shadow:3px 3px 3px 3px rgb(229, 229, 229);}
 form .text_box{width:100%;
-               height:100px;
+               height:80px;
               padding:20px;}
 .text_box p{margin-left:30px;
             width:90px;
             display:block;
             margin:0 auto;
-            font-weight:700;
+            font-weight:800;
             font-size:30px;} 
 
 .email, .password{width:100%;
@@ -97,6 +101,7 @@ form .text_box{width:100%;
                height:80px;}
 
 .email label, .password label{width:100%;
+                            font-weight:700;
                            height:25px;
                            display:block;
                            font-size:17px;
@@ -111,6 +116,7 @@ form .text_box{width:100%;
                            border-bottom: 1px solid black;
                            background-color:#fbfbfb;}
 .button{width:85%;
+        margin-top:5px;
         height:50px;}
 
 .button .btn1{width:100%;
@@ -120,24 +126,18 @@ form .text_box{width:100%;
              border-radius: 10px;
              border:0;
              color:#ffffff;
+             font-weight:700;
              background-color:rgb(34, 100, 153);}
 
 .button .btn2{width:100%;
              height:40px;
              margin-left:9%;
              margin-top:10px;
+             font-weight:700;
              border-radius: 10px;
              border:0;
              color:#ffffff;
              background-color:rgb(38, 150, 255);}
-
-.kakao{width:390px;
-       margin:0 auto;
-       height:40px;
-       margin-top:15px;}
-
-.kakao img{width:100%;
-           height:100%;}
 
 .Dlogin{margin-top:150px;
         margin-left:60%;}

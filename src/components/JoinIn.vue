@@ -110,10 +110,10 @@
   <style scoped>
   a{text-decoration:none;
    color:#fff;}
-  .wrap{height:1000px;
+  .wrap{height:1150px;
+        font-family: 'SUITE Variable';
          margin-bottom: 30px;
-         margin-top:150px;
-        font-family: 'NPSfontBold';}
+         padding-top:140px;;}
   .join_box{width:40%;;
     border-radius:10px;
     background-color:#fbfbfb;
@@ -146,6 +146,7 @@
                height:40px;
                border:0;
                background-color:#fff;
+               background-color:#fbfbfb;
                border-bottom:2px solid lightgray;
                margin-left:20px;
                padding:5px;

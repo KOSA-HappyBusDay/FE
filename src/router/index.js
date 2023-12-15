@@ -47,7 +47,7 @@ const router = createRouter({
       component: Event
     },
     {
-      path: '/listcon',
+      path: '/listcon:id',
       name: 'ListCon',
       component: ListCon
     },

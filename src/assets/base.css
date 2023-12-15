@@ -4,9 +4,5 @@ a{text-decoration:none;}
 
 html{height:100%;}
 
-@font-face {
-    font-family: 'NPSfontBold';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2310@1.0/NPSfontBold.woff2') format('woff2');
-    font-style: normal;
-}
-@import url('https://fonts.googleapis.com/css2?family=Whisper&display=swap');
+body{font-family: 'SUITE Variable', sans-serif;}
+

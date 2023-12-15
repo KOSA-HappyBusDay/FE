@@ -1,4 +1,5 @@
 <template>
+  <div class="wrap_wrap">
         <div class="alter_wrap">
             <div class="title">
                 <p class="h2">회원정보 조회/수정</p>
@@ -52,6 +53,7 @@
                 <button type="submit" class="btn btn-primary">수정사항 저장</button>
             </div>
         </div>
+      </div>
 </template>
 
 <script>
@@ -103,31 +105,32 @@ export default {
 };
 </script>
 <style scoped>
-.wrap {
+.wrap_wrap {
     width: 100%;
-    height: 100%;
-    font-family: 'NPSfontBold';
+    font-family: 'SUITE Variable';
+    margin-top:50px;
+    height: 120vh;
 }
 
 .alter_wrap {
     width: 40%;
+    background-color:#f1f1f1;
+    border-radius: 10px;
     height: 100%;
     margin: 0 auto;
-    margin-top: 50px;
-    margin-bottom: 40px;
-    border: 1px solid black;
+    margin-bottom: 40px
 }
 
 .alter_wrap .title {
     width: 100%;
     height: 50px;
-    margin-top: 20px;
+    padding-top:20px;
 }
 
 .alter_wrap .title p {
-    width: 150px;
-    font-size: 18px;
-    ;
+    width: 160px;
+    font-size: 20px;
+    font-weight:800;
     margin: 0 auto;
 }
 
@@ -148,8 +151,8 @@ span {
 }
 
 input {
-    width: 60%;
-    height: 40px;
+    width: 70%;
+    padding:10px;
     margin-left: 10px;
     border: 0;
     background-color: rgba(211, 211, 211, 0.573);
@@ -165,10 +168,23 @@ button {
     border-radius: 10px;
     border: 0;
     color: #ffffff;
-    background-color: #50a14a;
+    background-color:rgb(34, 100, 153);
 }
-select{width:60%;
+select{width:70%;
     padding:8px;
     margin-top:5px;
     margin-left:10px;}
+
+@media screen and (max-width:1200px){
+  .alter_wrap{width:350px;}
+
+  input {
+    width: 50%;
+  }
+  select{width:50%;}
+}
+@media screen and (max-width:700px){
+ .wrap_wrap{padding-top:150px;
+            height:140vh;}
+}
 </style>

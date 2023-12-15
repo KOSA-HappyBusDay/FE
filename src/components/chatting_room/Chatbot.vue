@@ -96,7 +96,7 @@ export default {
   padding:10px;
   width: 100%;
   color:#fff;
-  background-color: #ffbea2;
+  background-color: rgb(38, 150, 255);
 }
 
 .chat-content {
