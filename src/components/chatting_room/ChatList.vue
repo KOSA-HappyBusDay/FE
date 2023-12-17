@@ -4,7 +4,7 @@
     <div v-if="rooms && rooms.length > 0">
       <h3>Room List:</h3>
       <ul>
-        <li v-for="room in rooms" :key="room.roomId" @click="selectRoom(room.roomId)">
+        <li v-for="room in rooms" :key="room.id" @click="selectRoom(room.id)">
           {{ room.name }}
         </li>
       </ul>
@@ -26,15 +26,23 @@ export default {
       rooms: [],
     };
   },
+  created() {
+    console.log(this.$store.state.chatRoomId);
+  },
   computed: {
     memberId() {
       return this.$store.state.memberId;
     },
   },
   methods: {
+    selectRoom(roomId) {
+      this.$store.commit('setChatRoomId', roomId);
+      this.$router.push(`/chatting/${roomId}`);
+    },
+
     async fetchClinicMembers() {
       try {
-        const response = await axios.get('http://localhost:8761/clinic-members/list', {
+        const response = await axios.get('http://13.209.76.161:8761//clinic-members/list', {
           headers: {
             'Authorization': `Bearer ${this.$store.state.token}`,
           },
@@ -51,7 +59,7 @@ export default {
 
       try {
         const response = await axios.post(
-          'http://localhost:8761/chatroom/create',
+          'http://13.209.76.161:8761//chatroom/create',
           {
             name: roomName,
             memberId: memberId,
@@ -79,7 +87,7 @@ export default {
     },
     async fetchRooms() {
       try {
-        const response = await axios.get('http://localhost:8761/chatroom/list', {
+        const response = await axios.get('http://13.209.76.161:8761//chatroom/list', {
           headers: {
             'Authorization': `Bearer ${this.$store.state.token}`,
           },

@@ -41,7 +41,7 @@ export default {
       return; // Early return if memberId is not set
       }
       try {
-        const response = await axios.get(`http://localhost:8761/face-picture/list/${memberId}`, {
+        const response = await axios.get(`http://13.209.76.161:8761//face-picture/list/${memberId}`, {
           headers: {
             'Authorization': `Bearer ${this.$store.state.token}`
           }
@@ -52,7 +52,7 @@ export default {
       }
     },
     getImageUrl(type, id) {
-      return `http://localhost:8761/face-picture/image/${type}/${id}`;
+      return `http://13.209.76.161:8761//face-picture/image/${type}/${id}`;
     }
   }
 }

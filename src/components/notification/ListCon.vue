@@ -33,7 +33,7 @@ export default {
     const facePictureId = this.$route.params.id;
     if (facePictureId) {
       try {
-        const response = await axios.get(`http://192.168.0.23:8761/face-picture/detail/${facePictureId}`);
+        const response = await axios.get(`http://13.209.76.161:8761//face-picture/detail/${facePictureId}`);
         this.facePicture = this.formatFacePictureData(response.data);
       } catch (error) {
         console.error('Error fetching details:', error);
@@ -45,7 +45,7 @@ export default {
       this.$router.go(-1);
     },
     formatFacePictureData(data) {
-      const baseUrl = 'http://localhost:8761/face-picture/image/';
+      const baseUrl = 'http://13.209.76.161:8761//face-picture/image/';
       const images = [
         { type: 'forehead', url: `${baseUrl}forehead/${data.id}`, label: '이마' },
         { type: 'leftCheek', url: `${baseUrl}leftCheek/${data.id}`, label: '좌측 뺨' },

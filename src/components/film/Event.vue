@@ -3,7 +3,7 @@
     <v-app id="inspire">
       <v-card class="elevation-12">
         <div class="toolbar" dark color="green">
-          <div class=title>이미지 업로드</div>
+          <div class="title">이미지 업로드</div>
         </div>
         <div class="card">
           <v-form class="upload" @keydown.enter="addImage" method="post">
@@ -11,48 +11,21 @@
               label="Choose an album" type="search">
             </v-text-field>
             <div class="image_part">
-              <div class="upload_img1">
+              <div v-for="(label, key) in imageKeys" :key="key" class="upload_img">
                 <div class="warning">
-                  <p>*이마부분만 찍어주세요</p>
+                  <p>{{ label.warning }}</p>
                 </div>
-                <input @change="onFileSelected('forehead', $event)" type="file" name="forehead" id="image1">
-                <div id="imagePreview1">
-                  <img id="img1">
-                </div>
-              </div>
-              <div class="upload_img2">
-                <div class="warning">
-                  <p>*왼쪽 볼부분만 찍어주세요</p>
-                </div>
-                <input @change="onFileSelected('leftCheek', $event)" type="file" name="leftCheek" id="image2">
-                <div id="imagePreview2">
-                  <img id="img2">
-                </div>
-              </div>
-              <div class="upload_img3">
-                <div class="warning">
-                  <p>*오른쪽 볼부분만 찍어주세요</p>
-                </div>
-                <input @change="onFileSelected('rightCheek', $event)" type="file" name="rightCheek" id="image3">
-                <div id="imagePreview3">
-                  <img id="img3">
-                </div>
-              </div>
-              <div class="upload_img4">
-                <div class="warning">
-                  <p>*턱부분만 찍어주세요</p>
-                </div>
-                <input @change="onFileSelected('chin', $event)" type="file" name="chin" id="image4">
-                <div id="imagePreview4">
-                  <img id="img4">
+                <input @change="onFileSelected(key, $event)" type="file" :name="key" :id="`img${key + 1}`">
+                <div :id="`imagePreview${key + 1}`">
+                  <img :id="`img${key + 1}`">
                 </div>
               </div>
             </div>
           </v-form>
           <div class="button">
-          <v-spacer></v-spacer>
-          <button @click="addImage" color="green white--text">Upload</button>
-        </div>
+            <v-spacer></v-spacer>
+            <button @click="addImage" color="green white--text">Upload</button>
+          </div>
         </div>
       </v-card>
     </v-app>
@@ -74,19 +47,18 @@ export default {
         leftCheek: null,
         rightCheek: null,
         chin: null,
-      }
+      },
+      imageKeys: ["forehead", "leftCheek", "rightCheek", "chin"],
     };
   },
   methods: {
-    onFileSelected(type, event) {
+    onFileSelected(key, event) {
       if (!event || !event.target || !event.target.files) {
         return;
       }
-
+      const img = event.target.id;
+      const imgPreview = document.getElementById(`img1`);
       const imgFile = event.target.files[0];
-      this.uploadImage[type] = imgFile;
-
-      const imgPreview = document.getElementById(`img${type}`);
       if (imgFile) {
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -96,19 +68,20 @@ export default {
       } else {
         imgPreview.src = '';
       }
+      this.uploadImage[key] = imgFile;
     },
     addImage() {
       const formData = new FormData();
       formData.append('album_path', this.uploadImage.album_path);
 
-      Object.keys(this.uploadImage).forEach(key => {
+      this.imageKeys.forEach(key => {
         const image = this.uploadImage[key];
         if (image) {
           formData.append(key, image);
         }
       });
 
-      const imageUploadUrl = 'http://192.168.0.10:5001/predict';
+      const imageUploadUrl = 'http://localhost:5001/predict';
 
       const imagePromise = axios.post(imageUploadUrl, formData, {
         headers: {
@@ -130,7 +103,6 @@ export default {
   }
 };
 </script>
-
 <style scoped>
 .red-text {
   color: red;
@@ -175,8 +147,8 @@ export default {
                color:#fff;
                background-color:rgb(34, 100, 153);}
 
-#imagePreview1,#imagePreview2,#imagePreview3,#imagePreview4{height:300px;
-                                                            width:200px;}
+#imagePreview1,#imagePreview2,#imagePreview3,#imagePreview4{height:200px;
+                                                            width:350px;}
 
 .upload_img1, .upload_img2,.upload_img3,.upload_img4{width:350px;
                                                      height:300px;}
@@ -211,6 +183,6 @@ input{width:250px;}
 
 @media screen and (max-width:800px){
   .image_part{width:350px;}
-  
+
 }
 </style>

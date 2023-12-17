@@ -111,7 +111,7 @@ export default createStore({
   actions: {
     async login({ commit }, credentials) {
       try {
-        const response = await axios.post('http://localhost:8761/auth/login', credentials);
+        const response = await axios.post('http://13.209.76.161:8761//auth/login', credentials);
         const memberType = response.data.memberType;
         const memberId = response.data.memberId;
         const ClinicMemberId = response.data.ClinicMemberId;
@@ -135,7 +135,7 @@ export default createStore({
         else{
           const email = this.state.email;
         }
-        const response = await axios.get(`http://localhost:8761/auth/member-info?email=${email}`, {
+        const response = await axios.get(`http://13.209.76.161:8761//auth/member-info?email=${email}`, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${this.state.token}`,

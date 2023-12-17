@@ -40,7 +40,7 @@ export default {
         return; // 함수 실행 중지
       }
       axios
-        .post("http://localhost:8761/clinic-members/login", this.LoginUser, {
+        .post("http://13.209.76.161:8761//clinic-members/login", this.LoginUser, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${this.$store.getters.getToken}`,
@@ -53,6 +53,7 @@ export default {
           if (result.status === 200) {
             alert("로그인 성공");
             this.$store.commit('setClinicMemberId', result.data.id); // memberId 저장
+            this.$store.commit('setClinicEmail', result.data.clinicEmail); // clinicEmail 저장
             this.$store.commit('setMemberType', 'clinicMember'); // memberType을 'clinicMember'로 설정
             console.log('Vuex 상태 업데이트 후:', this.$store.state);
             this.$router.push("/");

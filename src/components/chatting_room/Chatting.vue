@@ -1,17 +1,21 @@
 <template>
   <div class="wrap">
-    <h2>채팅방</h2>
-    <div v-if="rooms && rooms.length > 0">
-      <h3>Room List:</h3>
-      <ul>
-        <li v-for="room in rooms" :key="room.roomId" @click="selectRoom(room.roomId)">
-          {{ room.name }} - {{ room.creatorName }}
-        </li>
-      </ul>
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <label class="input-group-text">내용</label>
+      </div>
+      <input type="text" class="form-control" v-model="message" @keypress.enter="sendMessage">
+      <div class="input-group-append">
+        <button class="btn btn-primary" type="button" @click="sendMessage">메시지 보내기</button>
+      </div>
     </div>
-    <div v-else>
-      <p>채팅방이 없습니다.</p>
-    </div>
+    <ul class="list-group">
+      <li class="list-group-item" v-for="(message, index) in messages" :key="index">
+        {{ message.sender }} - {{ message.content }}
+        <button class="btn btn-primary" type="button" @click="translateMessage(message.id)">번역하기</button>
+      </li>
+    </ul>
+    <div></div>
   </div>
 </template>
 
@@ -21,78 +25,121 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      selectedClinicMember: null,
-      clinicMembers: [],
-      rooms: [],
+      message: '',
+      messages: [],
+      intervalId: null,
     };
   },
-  methods: {
-    selectRoom(roomId) {
-      this.$store.commit('setChatRoomId', roomId);
-      this.$router.push(`/chatting/${roomId}`);
-    },
-    async fetchClinicMembers() {
-      try {
-        const response = await axios.get('http://192.168.0.9:8761/clinic-members/list', {
-          headers: {
-            'Authorization': `Bearer ${this.$store.state.token}`,
-          },
-        });
-        this.clinicMembers = response.data;
-      } catch (error) {
-        console.error('Error fetching clinic members:', error);
+  computed: {
+    senderId() {
+      if (this.$store.state.memberType === 'clinicMember') {
+        return this.$store.state.clinicMemberId;
       }
+      return this.$store.state.memberId;
     },
-    async createChatroom(clinicMemberId) {
-      await this.fetchClinicMembers();
-
-      const roomName = prompt('Enter room name:');
-      const memberId = this.$store.state.memberId;
-
+    senderName() {
+      return this.$store.state.memberName;
+    },
+    chatRoomId() {
+      return this.$store.getters.getChatRoomId;
+    },
+  },
+  created() {
+    if (this.chatRoomId) {
+      this.getMessages();
+      setInterval(this.getMessages, 1000);
+    }
+  },
+  methods: {
+    async sendMessage() {
       try {
-        const response = await axios.post('http://192.168.0.9:8761/chatroom/create', {
-          name: roomName,
-          memberId: memberId,
-          clinicMemberId: clinicMemberId,
+        const senderType = this.$store.state.memberType === 'member' ? 'member' : 'clinicMember';
+        const response = await axios.post('http://13.209.76.161:8761//message/send', {
+          chatRoomId: this.chatRoomId,
+          senderId: this.senderId,
+          senderType: senderType,
+          content: this.message,
         }, {
           headers: {
             'Authorization': `Bearer ${this.$store.state.token}`,
-            'Content-Type': 'application/json',
           },
         });
 
-        if (response.status === 200) {
-          alert(`채팅방이 생성되었습니다. 채팅방 이름: ${response.data.name}`);
-          this.fetchRooms();
-          this.$store.commit('setChatRoomId', response.data.roomId);
-          console.log('저장된 chatRoomId:', this.$store.state.chatRoomId);
-        } else {
-          console.error('Room creation failed:', response);
+        console.log('서버의 응답:', response);
+
+        if (!this.intervalId) {
+          this.intervalId = setInterval(this.getMessages, 1000);
         }
       } catch (error) {
-        console.error('Error creating room:', error);
+        console.error("메시지를 보내는 중 오류가 발생했습니다:", error);
       }
     },
-    async fetchRooms() {
+
+    async getMessages() {
       try {
-        const response = await axios.get('http://192.168.0.9:8761/chatroom/list', {
+        const response = await axios.get(`http://13.209.76.161:8761//message/${this.chatRoomId}`, {
           headers: {
             'Authorization': `Bearer ${this.$store.state.token}`,
           },
         });
-        this.rooms = response.data;
+
+        console.log('서버의 응답:', response);
+
+        this.messages = response.data;
       } catch (error) {
-        console.error('Error fetching rooms:', error);
+        console.error("메시지를 가져오는 중 오류가 발생했습니다:", error);
+
+        if (this.intervalId) {
+          clearInterval(this.intervalId);
+          this.intervalId = null;
+        }
       }
-    }
-  },
-  mounted() {
-    this.fetchClinicMembers();
-    this.fetchRooms();
+    },
+
+    async sendMessageAsClinicMember() {
+      try {
+        const response = await axios.post('http://13.209.76.161:8761//message/clinicMember', {
+          chatRoom: this.chatRoomId,
+          sender: this.senderId,
+          senderName: this.senderName,
+          senderType: 'clinicMember',
+          content: this.message,
+        }, {
+          headers: {
+            'Authorization': `Bearer ${this.$store.state.token}`,
+          },
+        });
+
+        console.log('서버의 응답:', response);
+
+        if (!this.intervalId) {
+          this.intervalId = setInterval(this.getMessages, 1000);
+        }
+      } catch (error) {
+        console.error("클리닉 멤버로 메시지를 보내는 중 오류가 발생했습니다:", error);
+      }
+    },
+
+    async translateMessage(messageId) {
+      try {
+        const response = await axios.post('http://13.209.76.161:8761//message/translate', {
+          messageId: messageId,
+        }, {
+          headers: {
+            'Authorization': `Bearer ${this.$store.state.token}`,
+          },
+        });
+
+        alert(`번역된 메세지: ${response.data}`);
+      } catch (error) {
+        console.error("메시지를 번역하는 중 오류가 발생했습니다:", error);
+      }
+    },
   },
 };
 </script>
 
 <style scoped>
-.wrap { width: 100%; }
+/* 스타일은 필요에 따라 조정하세요 */
+.wrap { width: 100%; padding-top: 200px; }
 </style>

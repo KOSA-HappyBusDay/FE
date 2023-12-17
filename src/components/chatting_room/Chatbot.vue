@@ -1,16 +1,15 @@
 <template>
-  <div class="chatbot" v-if="isVisible" @click.stop>
-    <!-- @click.stop prevents the click event from propagating to the parent -->
+  <div class="wrap">
+      <b-container class="text-center" id="chatbot"  v-if="isVisible" @click.stop>
     <h2 class="h2-title">ChatBot</h2>
-
     <div class="chat-content">
       <div v-for="(message, index) in messages" :key="index" class="line">
-        <span :class="{ 'chat-box': true, 'mine': message.isMine }">
+        <span :class="{'chat-box': true, 'mine': message.isMine}">
           {{ message.content }}
         </span>
-      </div>
+      </div>    
     </div>
-    <div class="b">
+
     <div>
       <b-input-group prepend="질문" class="mt-3">
         <b-form-input id="input" v-model="userQuestion"></b-form-input>
@@ -20,17 +19,18 @@
       </b-input-group>
     </div>
     <div @click="closeChatbot" class="close">닫기</div>
-  </div>
+  </b-container>
   </div>
 </template>
-  
+
 <script>
 import axios from "axios";
 
 export default {
+  name: 'App',
   data() {
     return {
-      userQuestion: "",
+      userQuestion: '',
       messages: [],
     };
   },
@@ -43,28 +43,28 @@ export default {
         return;
       }
 
-      this.addMessageToChat(this.userQuestion, true);
+      this.addMessageToChat(this.userQuestion, true); // 사용자 질문을 채팅창에 추가
       let data = { question: this.userQuestion };
-      this.userQuestion = "";
+      this.userQuestion = '';
 
-      axios
-        .post("http://localhost:8761/chat-bot/question", data, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${this.$store.getters.getToken}`,
-          },
-        })
-        .then((response) => {
+      axios.post('http://13.209.76.161:8761//chat-bot/question', data, {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${this.$store.getters.getToken}`
+        }
+      })
+      .then(response => {
           const responseText = response.data.choices[0].message.content;
-          this.addMessageToChat(responseText, false);
-        })
-        .catch((error) => {
+          this.addMessageToChat(responseText, false); // 챗봇의 응답을 채팅창에 추가
+      })
+      .catch(error => {
           console.error("Error: ", error);
           alert("오류가 발생했습니다.");
-        });
+      });
     },
     addMessageToChat(message, isMine) {
       this.messages.push({ content: message, isMine });
+      // DOM 조작 대신 Vue의 반응형 데이터를 사용
     },
     closeChatbot() {
       this.$emit('close'); // Chatbot을 닫기 위한 이벤트 발생
@@ -72,14 +72,13 @@ export default {
   },
 };
 </script>
-  
+
 <style scoped>
-* {
-  margin: 0;
+* { margin: 0;
   padding: 0;
 }
-
-.chatbot {
+.wrap{padding:130px;}
+#chatbot {
   font-family: 'NPSfontBold';
   position: fixed;
   bottom: 0;
@@ -100,7 +99,7 @@ export default {
 }
 
 .chat-content {
-  height: 380px;
+  height: 350px;
   overflow-y: scroll;
 }
 

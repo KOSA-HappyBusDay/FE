@@ -18,7 +18,7 @@
 <script>
 import axios from "axios";
 
-const api = axios.create({ baseURL: 'http://localhost:8761' });
+const api = axios.create({ baseURL: 'http://13.209.76.161:8761/' });
 
 export default {
   data() {

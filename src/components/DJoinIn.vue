@@ -64,7 +64,7 @@ export default {
       }
 
       axios
-        .post("http://localhost:8761/clinic-members/register", this.DjoinUser, {
+        .post("http://13.209.76.161:8761//clinic-members/register", this.DjoinUser, {
           headers: {
             "Content-Type": "application/json",
           },

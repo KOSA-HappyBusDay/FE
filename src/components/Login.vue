@@ -43,7 +43,7 @@ export default {
     alert("이메일과 비밀번호를 입력해주세요.");
     return; // Stop the function execution
   }
-      axios.post("http://localhost:8761/auth/login", this.LoginUser, {
+      axios.post("http://13.209.76.161:8761//auth/login", this.LoginUser, {
 headers: {
   "Content-Type": "application/json",
   Authorization: `Bearer ${this.$store.getters.getToken}`

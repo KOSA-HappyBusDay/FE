@@ -85,7 +85,7 @@ export default {
 
       try {
         const response = await axios.put(
-          `http://localhost:8761/auth/update/`,
+          `http://13.209.76.161:8761//auth/update/`,
           this.joinUser,
           {
             headers: {
