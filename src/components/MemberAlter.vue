@@ -3,6 +3,7 @@
         <div class="alter_wrap">
             <div class="title">
                 <p class="h2">회원정보 조회/수정</p>
+                {{ fetchedUserNickname }}
             </div>
             <div class="group" style="margin-top:20px;">
                 <label for="name">이름</label>
@@ -57,14 +58,14 @@
 </template>
 
 <script>
-import { reactive } from "vue";
 import axios from "axios";
 
 export default {
   name: 'MemberAlter',
   data() {
     return {
-      joinUser: reactive({
+      fetchedUserNickname:'',
+      joinUser: {
         email: "",
         password: "",
         name: "",
@@ -73,8 +74,11 @@ export default {
         passwordtest: "",
         skintype: "",
         gender: "",
-      }),
+      },
     };
+  },
+  mounted() {
+    this.fetchUserNickname()
   },
   methods: {
     async updateUserInfo() {
@@ -85,7 +89,7 @@ export default {
 
       try {
         const response = await axios.put(
-          `http://13.209.76.161:8761//auth/update/`,
+          `http://192.168.0.10:8761/auth/update/`,
           this.joinUser,
           {
             headers: {
@@ -101,13 +105,30 @@ export default {
         console.error(error);
       }
     },
+    fetchUserNickname() {
+     // 사용자 닉네임을 가져오는 메서드입니다.
+     const email = this.$store.state.email;
+     axios.get(`http://192.168.0.10:8761/auth/member-info?email=${email}`, {
+       headers: {
+         "Content-Type": "application/json",
+         'Authorization': `Bearer ${this.$store.state.token}`
+       }
+     })
+     .then(response => {
+      console.log(response)
+       this.joinUser = response.data;
+     })
+     .catch(error => {
+       console.error("사용자 닉네임을 가져오는 중 오류가 발생했습니다:", error);
+     });
+   },
   },
 };
 </script>
 <style scoped>
 .wrap_wrap {
     width: 100%;
-    font-family: 'SUITE Variable';
+    font-family: 'SUITE';
     margin-top:50px;
     height: 120vh;
 }
@@ -128,7 +149,7 @@ export default {
 }
 
 .alter_wrap .title p {
-    width: 160px;
+    width: 200px;
     font-size: 20px;
     font-weight:800;
     margin: 0 auto;
@@ -175,7 +196,7 @@ select{width:70%;
     margin-top:5px;
     margin-left:10px;}
 
-@media screen and (max-width:1200px){
+@media screen and (max-width:1250px){
   .alter_wrap{width:350px;}
 
   input {

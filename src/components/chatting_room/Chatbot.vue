@@ -1,7 +1,14 @@
 <template>
   <div class="wrap">
       <b-container class="text-center" id="chatbot"  v-if="isVisible" @click.stop>
-    <h2 class="h2-title">ChatBot</h2>
+        <div class="title">
+          <h2 class="h2-title"> 
+            <div @click="closeChatbot" class="close">
+              <img src="../../static/엑스.png" alt="">
+            </div>
+            Cleanic
+          </h2>
+        </div>
     <div class="chat-content">
       <div v-for="(message, index) in messages" :key="index" class="line">
         <span :class="{'chat-box': true, 'mine': message.isMine}">
@@ -9,16 +16,14 @@
         </span>
       </div>    
     </div>
-
     <div>
-      <b-input-group prepend="질문" class="mt-3">
+      <b-input-group class="mt-3">
         <b-form-input id="input" v-model="userQuestion"></b-form-input>
         <b-input-group-append>
-          <b-button @click="sendQuestion()" variant="info">전송</b-button>
+          <b-button @click="sendQuestion()" variant="info" style=" background-color:rgb(38, 150, 255);">전송</b-button>
         </b-input-group-append>
       </b-input-group>
     </div>
-    <div @click="closeChatbot" class="close">닫기</div>
   </b-container>
   </div>
 </template>
@@ -47,7 +52,7 @@ export default {
       let data = { question: this.userQuestion };
       this.userQuestion = '';
 
-      axios.post('http://13.209.76.161:8761//chat-bot/question', data, {
+      axios.post('http://192.168.0.10:8761/chat-bot/question', data, {
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${this.$store.getters.getToken}`
@@ -78,28 +83,36 @@ export default {
   padding: 0;
 }
 .wrap{padding:130px;}
+
 #chatbot {
-  font-family: 'NPSfontBold';
+  font-family: 'SUITE';
   position: fixed;
   bottom: 0;
+  padding:0;
   right: 10px;
-  width: 400px;
+  width: 350px;
   height: 500px;
   border-radius: 10px;
   overflow:hidden;
-  background-color: rgb(244, 244, 244)  ;
-  border: 1px solid #ccc;
+  opacity:0.97;
+  background-color: #fff  ;
 }
-
-.h2-title {
+.title h2{font-size:25px;
+          margin-right:10px;}
+.title {
+  box-shadow: 0px 15px 5px -1px rgb(228, 228, 228);
   padding:10px;
   width: 100%;
   color:#fff;
-  background-color: rgb(38, 150, 255);
+  background-color: rgb(34, 100, 153);
 }
 
+img{width:20px;
+   float:left;
+   margin-top:5px;}
+
 .chat-content {
-  height: 350px;
+  height: 400px;
   overflow-y: scroll;
 }
 
@@ -111,11 +124,15 @@ export default {
 .chat-box {
   background: #eee;
   padding: 5px;
-  max-width: 50%;
+  font-size:14px;
+  border-radius:5px;
+  max-width: 80%;
 }
 
 .mine {
   margin-left: auto;
 }
 .b{height:50px;}
+
+.m-3{opacity:0.97;}
 </style>

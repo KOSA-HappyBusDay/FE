@@ -1,10 +1,10 @@
 <template>
-  <div class="wrap">
-    <h2>채팅방</h2>
+  <div class="chat_wrap">
+    <div class="title">채팅 LIST</div>
     <div v-if="rooms && rooms.length > 0">
-      <h3>Room List:</h3>
       <ul>
         <li v-for="room in rooms" :key="room.id" @click="selectRoom(room.id)">
+          <img src="../../static/건물.jpg" alt="">
           {{ room.name }}
         </li>
       </ul>
@@ -42,7 +42,7 @@ export default {
 
     async fetchClinicMembers() {
       try {
-        const response = await axios.get('http://13.209.76.161:8761//clinic-members/list', {
+        const response = await axios.get('http://192.168.0.10:8761/clinic-members/list', {
           headers: {
             'Authorization': `Bearer ${this.$store.state.token}`,
           },
@@ -59,7 +59,7 @@ export default {
 
       try {
         const response = await axios.post(
-          'http://13.209.76.161:8761//chatroom/create',
+          'http://192.168.0.10:8761/chatroom/create',
           {
             name: roomName,
             memberId: memberId,
@@ -87,7 +87,7 @@ export default {
     },
     async fetchRooms() {
       try {
-        const response = await axios.get('http://13.209.76.161:8761//chatroom/list', {
+        const response = await axios.get('http://192.168.0.10:8761/chatroom/list', {
           headers: {
             'Authorization': `Bearer ${this.$store.state.token}`,
           },
@@ -117,7 +117,44 @@ export default {
 </script>
 
 <style scoped>
-.wrap {
-  width: 100%;
+.chat_wrap {
+  width: 84%;
+  height:500px;
+  max-height: 600px;
+  font-family: 'SUITE';
+  flex-wrap: wrap; 
+  float:right;
+}
+
+
+
+ul{padding-left:10px;}
+.title{width:100%;
+       font-size:24px;
+       margin-left:10px;
+       margin-bottom: 10px;
+       font-family: 'SUITE';
+       height:30px;
+       font-weight:700;}
+
+       li img{width:60px;
+      border-radius:20px;
+      margin-right:20px;
+       height:60px;
+       ;}
+
+li{border-top:1px solid lightgray;
+   padding:20px;
+   width:50%;
+   font-weight: 500;
+   font-size:20px;
+  border-bottom:1px solid lightgray;}
+
+@media screen and (max-width:900px){
+  .chat_wrap{  padding-left:80px;}
+
+
+
+  li{width:100%;}
 }
 </style>

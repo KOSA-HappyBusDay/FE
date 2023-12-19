@@ -12,7 +12,6 @@ import Mypage from '@/components/mypage/Mypage.vue'
 import Chatting from '@/components/chatting_room/Chatting.vue'
 import ClinicList from '@/components/chatting_room/ClinicList.vue'
 
-
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [

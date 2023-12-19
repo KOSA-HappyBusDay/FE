@@ -12,8 +12,8 @@
    <div class="menu_wrap">
     <div class="menu">
       <ul class="menu_list">
-        <li @click="selectContent('inspectionList')">검사 LIST</li>
-        <li @click="selectContent('Chatroomlist')">채팅방 내역</li>
+        <li @click="selectContent('inspectionList')">진단 LIST</li>
+        <li @click="selectContent('Chatroomlist')">채팅 LIST</li>
         <li @click="selectContent('updateMemberInfo')">회원정보수정</li>
       </ul>
     </div>
@@ -78,15 +78,15 @@ export default {
 
 <style scoped>
 .wrap {
-  padding-top:200px;
+  padding-top:150px;
   width:97%;
   margin:0 auto;
   height:170vh;
   border-radius: 10px;
-  font-family: 'SUITE Variable';
+  font-family: 'SUITE';
 }
 .profile{text-align: center;
-        height:250px;
+        height:200px;
         width:100%;}
 .file-label {
   cursor: pointer;
@@ -94,7 +94,7 @@ export default {
   margin-left:20px;
   width:110px;
   height:30px;
-  background-color: rgb(34, 100, 153);;
+  background-color: rgb(34, 100, 153);
   color: #fff;
   border-radius: 5px;
   display: inline-block;
@@ -105,11 +105,15 @@ export default {
 }
 
 .menu_wrap{border:1px solid lightgray;
+  border-radius:5px;
+  min-height: 600px;
+  max-height:900px;
 margin:0 auto;}
 
 img {
   width:140px;
   height:140px;
+
   border:1px solid black;
   margin-top: 10px;
   border-radius:100px;
@@ -130,7 +134,7 @@ div {
 ul{padding-left:0}
 .menu_list li {
 font-size: 18px;
-font-weight:500;
+font-weight:600;
   text-align: center;
   padding:5px;
   border-bottom:1px solid lightgray;

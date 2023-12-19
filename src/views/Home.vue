@@ -12,7 +12,9 @@
         </div>
       </div>
       <div class="section" id="companyInfoScroll3">
-
+         <div class="mobile">
+          <p>모바일로도 볼 수 있는 CLEANZONE</p>
+         </div>
       </div>
       <div ref="chat" class="chat" @click="toggleChatbot">
         <Chatbot :is-visible="isChatbotVisible" @close="closeChatbot" />
@@ -99,7 +101,7 @@ export default {
 <style scoped>
 .wrap {
   font-family: 'SUITE Variable';
-  padding-top: 140px;
+  padding-top: 130px;
   width: 100%;
   height: 100%;
 }
@@ -150,7 +152,7 @@ li {
   margin-top: 24%;
   font-weight: 600;
   margin-right: 12%;
-  width: 30%;
+  width: 36%;
   float: right;
 }
 .section .doctor_bg {
@@ -165,10 +167,9 @@ li {
 .doctor_bg p {
   font-size: 3.5vw;
   margin-top: 24%;
- margin-right:50%;
+ margin-left:5%;
   font-weight: 600;
-  width: 45%;
-  float: right;
+  width: 50%;
 }
 .animate-up {
   opacity: 0; /* 초기에는 숨겨진 상태로 설정 */
@@ -181,4 +182,24 @@ li {
   opacity: 1;
   transform: translateY(0);
 }
+@media screen and (max-width:1000px) {  
+ .wrap{padding-top:80px;}
+
+ header{height:60px;}
+}
+
+.mobile{background-image: url("../static/bg_3.png");
+  background-size:100%;
+  position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;}
+
+  .mobile p{font-size: 3.5vw;
+  margin-top: 30%;
+  font-weight: 600;
+  margin-right: 12%;
+  width: 36%;
+  float: right;}
 </style>

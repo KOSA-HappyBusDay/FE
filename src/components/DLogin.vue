@@ -40,7 +40,7 @@ export default {
         return; // 함수 실행 중지
       }
       axios
-        .post("http://13.209.76.161:8761//clinic-members/login", this.LoginUser, {
+        .post("http://192.168.0.10:8761/clinic-members/login", this.LoginUser, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${this.$store.getters.getToken}`,
@@ -56,6 +56,7 @@ export default {
             this.$store.commit('setClinicEmail', result.data.clinicEmail); // clinicEmail 저장
             this.$store.commit('setMemberType', 'clinicMember'); // memberType을 'clinicMember'로 설정
             console.log('Vuex 상태 업데이트 후:', this.$store.state);
+            console.log('로그인한 clinicMemberId:', this.$store.state.clinicMemberId); // 로그인한 clinicMemberId 출력
             this.$router.push("/");
           }
         })
@@ -73,7 +74,7 @@ a {
 }
 
 .wrap {
-  font-family: 'NPSfontBold';
+  font-family: 'SUITE';
   padding-top: 140px;
 }
 
@@ -111,7 +112,7 @@ form .text_box {
 }
 
 .email label,
-.password label {
+.password label{
   width: 100%;
   height: 25px;
   display: block;
@@ -122,7 +123,7 @@ form .text_box {
 .email input,
 .password input {
   margin-left: 30px;
-  width: 85%;
+  width: 90%;
   background-color: #fbfbfb;
   height: 50px;
   border: 0px;

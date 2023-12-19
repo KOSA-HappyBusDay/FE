@@ -64,7 +64,7 @@ export default {
       }
 
       axios
-        .post("http://13.209.76.161:8761//clinic-members/register", this.DjoinUser, {
+        .post("http://192.168.0.10:8761/clinic-members/register", this.DjoinUser, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -86,11 +86,12 @@ export default {
   <style scoped>
   .wrap{height:100vh;
         padding-top:150px;
-        font-family: 'NPSfontBold';}
+        font-family: 'SUITE';}
   .join_box{width:40%;;
             height:530px;
             background-color:#fbfbfb;
             border:1px solid lightgray;
+            border-radius:10px;
             box-shadow:3px 3px 3px 3px lightgray;
             margin:0 auto;
             margin-top:50px;

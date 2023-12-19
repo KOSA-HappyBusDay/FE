@@ -10,7 +10,7 @@ import 'bootstrap-vue-3/dist/bootstrap-vue-3.css'
 import BootstrapVue3 from 'bootstrap-vue-3'
 
 const instance = axios.create({
-    baseURL: "http://192.168.0.49:5173/",
+    baseURL: "http://192.168.0.10:5173/",
     timeout: 1000,
 });
 

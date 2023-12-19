@@ -88,7 +88,7 @@
         return; // 일치하지 않으면 회원가입 시도를 중단
       }
         axios
-        .post("http://13.209.76.161:8761//auth/register", this.joinUser, {
+        .post("http://192.168.0.10:8761/auth/register", this.joinUser, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -111,7 +111,7 @@
   a{text-decoration:none;
    color:#fff;}
   .wrap{height:1150px;
-        font-family: 'SUITE Variable';
+    font-family: 'SUITE';
          margin-bottom: 30px;
          padding-top:140px;;}
   .join_box{width:40%;;

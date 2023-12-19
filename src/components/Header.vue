@@ -7,10 +7,20 @@
             <img src="../static/로고.png" alt="">
           </a>
         </RouterLink>
-        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
-          aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
+
+        <div class="header-right">
+          <div class="Slogin_header" v-if="$store.state.isLogin">
+            <p v-if="isClinicMember">{{ fetchedClinicName }}</p>
+            <p v-else>{{ fetchedUserNickname }}님</p>
+          </div>
+
+          <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+            aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </div>
+       
+
         <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
           <div class="offcanvas-header">
             <h5 class="offcanvas-title" id="offcanvasNavbarLabel">CLEAN ZONE</h5>
@@ -20,13 +30,14 @@
             <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
               <li class="nav-item">
                 <div class="Slogin" v-if="$store.state.isLogin">
-                  <p v-if="isClinicMember">{{ fetchedClinicName }}원장님</p>
+                  <p v-if="isClinicMember">{{ fetchedClinicName }}</p>
                   <p v-else>{{ fetchedUserNickname }}님</p>
                 </div>
               </li>
               <li class="nav-item">
                 <RouterLink to="/"><a class="nav-link active" aria-current="page" href="#">Home</a></RouterLink>
               </li>
+
               <li class="nav-item" v-if="$store.state.isLogin">
                 <RouterLink to="/logout" type="button" @click="logout">
                   <a class="nav-link" href="#">로그아웃</a>
@@ -43,16 +54,13 @@
                 </RouterLink>
               </li>
               <li class="nav-item">
-                <RouterLink to="/event"><a class="nav-link" href="#">얼굴 촬영</a></RouterLink>
+                <RouterLink to="/event"><a class="nav-link" href="#">진단</a></RouterLink>
               </li>
               <li class="nav-item">
+                <RouterLink to="/cliniclist"><a class="nav-link" href="#">클리닉 리스트</a></RouterLink>
+              </li>
+              <li class="nav-item"  v-if="$store.state.isLogin">
                 <RouterLink to="/mypage"><a class="nav-link" href="#">마이페이지</a></RouterLink>
-              </li>
-              <li class="nav-item">
-                <RouterLink to="/cliniclist"><a class="nav-link" href="#">병원채팅리스트</a></RouterLink>
-              </li>
-              <li class="nav-item">
-                <RouterLink to="/chatbot"><a class="nav-link" href="#">챗봇</a></RouterLink>
               </li>
             </ul>
           </div>
@@ -106,7 +114,7 @@ export default {
      // 클리닉 정보를 가져오는 메서드입니다.
      const clinicEmail = this.$store.state.clinicEmail;
      try {
-       const response = await axios.get(`http://13.209.76.161:8761//clinic-members/info?clinicEmail=${clinicEmail}`, {
+       const response = await axios.get(`http://192.168.0.10:8761/clinic-members/info?clinicEmail=${clinicEmail}`, {
          headers: {
            "Content-Type": "application/json",
            'Authorization': `Bearer ${this.$store.state.token}`
@@ -120,7 +128,7 @@ export default {
    fetchUserNickname() {
      // 사용자 닉네임을 가져오는 메서드입니다.
      const email = this.$store.state.email;
-     axios.get(`http://13.209.76.161:8761//auth/member-info?email=${email}`, {
+     axios.get(`http://192.168.0.10:8761/auth/member-info?email=${email}`, {
        headers: {
          "Content-Type": "application/json",
          'Authorization': `Bearer ${this.$store.state.token}`
@@ -155,8 +163,7 @@ export default {
 </script>
 
 <style scoped>
-li {
-  list-style: none;
+li {list-style: none;
 }
 
 .offcanvas-title {
@@ -171,7 +178,7 @@ header {
   z-index: 1000;
   background-color: #fff;
   padding-top: 140px;
-  font-family: 'SUITE Variable';
+  font-family: 'SUITE';
   font-weight: 600;
 }
 
@@ -185,38 +192,63 @@ a {
   width: 100%;
   top: 0;
 }
+.container-fluid >a{width:100px;}
 
 img {
-  width: 150px;
-  margin-top: 20px;
-}
-
-.navbar a {
   width: 100px;
+  margin-top: 20px;
+  margin-bottom: 0px;
 }
 
-header {
-  height: 120px;
+.navbar > a {
+  width: 100px;
+  margin-left:10px;
 }
-
-.container-fluid img {
-  width: 90%;
-}
-
 .Slogin {
   width: 100px;
 }
+.Slogin_header {
+  margin-right: 25px; /* 토글 버튼과의 간격 */
+  margin-top: 15px;
+}
+.navbar-toggler {
+  /* display: inline-block; 인라인 블록으로 설정 */
+  vertical-align: top; /* 상단 정렬 */
+  margin-left: 0; /* 왼쪽 여백 제거 */
+}
 
-@media screen and (max-width:600px) {
-  .router-link-active {
-      width: 280px;
+.navbar-nav {
+  display: inline-block; /* 네비게이션 요소들을 인라인으로 표시 */
+}
+
+.offcanvas-body {
+  /* .offcanvas-body에 대한 스타일 수정 */
+  display: flex;
+  flex-direction: column;
+}
+
+.header-right {
+  display: inline-flex;
+  align-items: center;
+  /* justify-content: flex-end; */
+}
+
+@media screen and (max-width: 1000px) {
+
+  header{padding-top:100px;}
+  .navbar-toggler {
+    order: -1;
+    margin-right: 10px;
+  }  
+  .Slogin_header {
+    order: -1; /* 토글 버튼 앞으로 이동 */
+    margin-right: 10px; /* 여백 제거 */
   }
+  .navbar > a {
+  width: 60px;
+  margin-left:10px;
+}
+img{width:70px;}
 
-  #offcanvasNavbar {
-      width: 250px;
-  }
-
-
-
-
-}</style>
+}
+</style>

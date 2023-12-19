@@ -1,16 +1,16 @@
 <template>
-  <div class="container">
-    <h2>FacePicture Details</h2>
-    <div v-if="facePicture">
+  <div class="section">
+    <h2>진단 결과</h2>
+    <div v-if="facePicture" class="all">
+      <p class="picture-date">{{ facePicture.localDate }}</p>
       <div class="image">
-      <div class="image-container" v-for="image in facePicture.images" :key="image.type">
+        <div class="image-container" v-for="image in facePicture.images" :key="image.type">
         <img :src="image.url" :alt="image.type" class="face-image"/>
         <p>{{ image.label }}</p>
       </div>
     </div>
-      <p class="picture-date">Date: {{ facePicture.localDate }}</p>
-      <div class="ai-messages">
-        <div v-for="(item, index) in splitAImessages" :key="index">
+      <div class="ai-messages" style="overflow-y: auto; ">
+        <div v-for="(item, index) in splitAImessages" :key="index" class="info">
           <h3>{{ item.part }}</h3>
           <p>{{ item.message }}</p>
         </div>
@@ -33,7 +33,7 @@ export default {
     const facePictureId = this.$route.params.id;
     if (facePictureId) {
       try {
-        const response = await axios.get(`http://13.209.76.161:8761//face-picture/detail/${facePictureId}`);
+        const response = await axios.get(`http://192.168.0.10:8761/face-picture/detail/${facePictureId}`);
         this.facePicture = this.formatFacePictureData(response.data);
       } catch (error) {
         console.error('Error fetching details:', error);
@@ -45,7 +45,7 @@ export default {
       this.$router.go(-1);
     },
     formatFacePictureData(data) {
-      const baseUrl = 'http://13.209.76.161:8761//face-picture/image/';
+      const baseUrl = 'http://192.168.0.10:8761/face-picture/image/';
       const images = [
         { type: 'forehead', url: `${baseUrl}forehead/${data.id}`, label: '이마' },
         { type: 'leftCheek', url: `${baseUrl}leftCheek/${data.id}`, label: '좌측 뺨' },
@@ -82,31 +82,59 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  padding:140px;
+h2{font-weight:600;}
+
+.section {
+  display: flex;
+  
+  flex-wrap: wrap;
+  font-family: 'SUITE';
+  padding-top:140px;
+  padding-left:20px;
 }
-.image{width:100%;}
+.ai-messages{flex: 1;
+            max-width: 50%; /* 반응형 조절을 위한 최대 너비 설정 */
+            box-sizing: border-box;
+            padding: 10px;;}
+.image{ flex: 1;
+            max-width: 50%; /* 반응형 조절을 위한 최대 너비 설정 */
+            box-sizing: border-box;
+            padding: 10px;
+        }
 .image-container {
-  width:260px;
-  margin-bottom: 20px;
+  width:250px;
+  height:250px;
   float:left;
+  margin-bottom:70px;
+  margin-left:80px;
 }
 
+.image-container:nth-child(3){margin-left:0px;}
+
+
+.image-container > p{text-align: center;
+                      margin:0 auto;
+                      margin-left:60px;
+                      font-weight: 600;
+                   width:150px;}
+.image-container:nth-child(1){margin-left:0px;}
+.all{width:100%;}
 .face-image {
-  width: 150px;
-  height: 150px;
+  width: 100%;
+  height:100%;
   object-fit: cover;
   border-radius: 8px;
 }
 
 
-
 .picture-date {
+  font-weight:400;
   margin-top: 20px;
-  font-size: 16px;
+  font-size: 24px;
 }
 
 .ai-messages h3 {
+  font-weight:400;
   margin-top: 15px;
 }
 
@@ -116,9 +144,10 @@ export default {
 
 .back-button {
   padding: 10px 20px;
-  background-color: #007bff;
+  background-color: rgb(38, 150, 255);
   color: white;
   border: none;
+  float:left;
   border-radius: 5px;
   cursor: pointer;
 }
@@ -126,5 +155,38 @@ export default {
 .back-button:hover {
   background-color: #0056b3;
 }
+.info {
+  float:left;
+  height:auto;
+  padding:10px;
+      border:1px solid lightgray;
+      border-radius: 5px;
+  margin-left:30px;
+  margin-bottom:20px;
+  max-height: 260px; /* Set the maximum height */
+  overflow-y: auto; /* Add overflow-y: auto for vertical scrolling */
+}
 
+@media screen and (max-width:1250px){
+  .image-container{margin-left:0px;
+    width:150px;
+    height:150px;
+  }
+
+  .info {
+  float:left;
+  height:auto;
+  padding:10px;
+      border:1px solid lightgray;
+      border-radius: 5px;
+  margin-left:30px;
+  margin-bottom:62px;
+  max-height: 150px; /* Set the maximum height */
+  overflow-y: auto; /* Add overflow-y: auto for vertical scrolling */
+}
+}
+@media screen and (max-width:500px){
+  .title{margin-left:50px;}
+
+}
 </style>
